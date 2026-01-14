@@ -8,7 +8,11 @@ const { generateQuiz } = require('./aiService');
 const setupSocketHandlers = require('./socketHandler');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 
 // Request logging middleware
@@ -21,8 +25,10 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: "*",
-        methods: ["GET", "POST"]
-    }
+        methods: ["GET", "POST"],
+        credentials: true
+    },
+    allowEIO3: true // Support older clients if any
 });
 
 // API Routes
