@@ -20,20 +20,32 @@ const TeacherDashboard = () => {
     const { createRoom, roomPin, players, startGame } = useGameStore();
 
     const handleGenerate = async () => {
+        if (!topic.trim()) return;
         setLoading(true);
         try {
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+            console.log(`Sending request to: ${API_URL}/api/generate-quiz`);
+
             const response = await fetch(`${API_URL}/api/generate-quiz`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ topic }),
             });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `Server responded with ${response.status}`);
+            }
+
             const data = await response.json();
             if (data.questions) {
                 createRoom(data.questions);
+            } else {
+                throw new Error("No questions returned from server");
             }
         } catch (err) {
-            console.error(err);
+            console.error('Generation Error:', err);
+            alert(`Failed to generate quiz: ${err.message}`);
         } finally {
             setLoading(false);
         }
