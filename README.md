@@ -41,10 +41,26 @@ cd client && npm run dev
 ```
 
 ## 📦 Deployment
-This project is configured for easy deployment on **Vercel**:
-1. Connect this repository to Vercel.
-2. Set the root directory to `client` (or use Vercel's monorepo settings).
-3. Ensure the server is deployed to a Node.js compatible environment.
+This project uses a hybrid deployment architecture for maximum reliability and performance:
+
+- **Frontend**: Hosted on **Vercel** for lightning-fast static delivery.
+- **Backend**: Hosted on **Render** (Web Service) to provide persistent, real-time Socket.io connections.
+- **Synchronization**: Automatically mirrored to both `Quizpoa` and `quizpoa254` GitHub repositories.
+
+### Environment Variables
+**Vercel (Frontend):**
+- `VITE_API_URL`: `https://quizpoa254-server.onrender.com`
+
+**Render (Backend):**
+- `OPENAI_API_KEY`: [Your Key]
+- `PORT`: 3001
+
+## 🗺️ Future Roadmap (Phase 2)
+Based on current progress, the following features are planned for the next stage of development:
+1. **Authentication**: User accounts and login functionality.
+2. **Persistence**: Database integration (MongoDB/PostgreSQL) to save quizzes and analytics.
+3. **Monetization**: Subscription tiers and credit-based AI generations.
+4. **Enhanced Analytics**: Detailed student performance tracking and reporting.
 
 ---
 Built with ❤️ by **Eutycreatives**
