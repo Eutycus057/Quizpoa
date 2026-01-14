@@ -11,6 +11,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -22,14 +28,17 @@ const io = new Server(server, {
 // API Routes
 app.post('/api/generate-quiz', async (req, res) => {
     const { topic } = req.body;
+    console.log(`Generating quiz for topic: ${topic}`);
     if (!topic) {
         return res.status(400).json({ error: 'Topic is required' });
     }
 
     try {
         const questions = await generateQuiz(topic);
+        console.log(`Successfully generated ${questions.length} questions`);
         res.json({ questions });
     } catch (error) {
+        console.error('Quiz generation failed:', error);
         res.status(500).json({ error: 'Failed to generate quiz' });
     }
 });
